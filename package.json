@@ -1,0 +1,9 @@
+{
+  "name": "hms_sqlite_project",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd backend && node src/index.js",
+    "client": "cd frontend && npm start"
+  }
+}

@@ -1,0 +1,79 @@
+/* Scope everything inside login page */
+.login-container * {
+  box-sizing: border-box;
+}
+
+/* Main container */
+.login-container {
+  height: 100vh;
+  background: #e3f2fd;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Card */
+.login-container .login-card {
+  width: 360px;
+  padding: 30px;
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.1);
+}
+
+/* Heading */
+.login-container .login-card h2 {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+/* Labels */
+.login-container label {
+  font-weight: 600;
+  margin-top: 12px;
+  display: block;
+}
+
+/* Input */
+.login-container input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #bbb;
+  margin-top: 6px;
+}
+
+/* Button */
+.login-container .login-btn {
+  width: 100%;
+  padding: 12px;
+  background: #0066ff;
+  border: none;
+  margin-top: 22px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+}
+
+/* Forgot */
+.login-container .forgot {
+  text-align: right;
+  margin-top: 10px;
+  color: #666;
+  font-size: 14px;
+}
+
+/* OP link */
+.login-container .op-link {
+  margin-top: 15px;
+  text-align: center;
+  color: #0077cc;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.login-container .op-link:hover {
+  text-decoration: underline;
+}

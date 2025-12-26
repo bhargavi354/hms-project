@@ -1,0 +1,53 @@
+.op-login-container {
+  height: 100vh;
+  background: #f1f8ff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.op-login-card {
+  width: 360px;
+  padding: 30px;
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.1);
+}
+
+.op-login-card h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-top: 12px;
+  font-weight: 600;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 6px;
+  border-radius: 8px;
+  border: 1px solid #aaa;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 18px;
+  background: #0077ff;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.back-admin {
+  text-align: center;
+  margin-top: 15px;
+  cursor: pointer;
+  color: #0066cc;
+}

@@ -1,0 +1,162 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+}
+
+.container {
+  max-width: 1000px;
+  margin: 30px auto;
+  padding: 25px;
+  background: #ffffffdd;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+h2 {
+  text-align: center;
+  color: #00796b;
+  margin-bottom: 25px;
+}
+
+.form-card {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  background: #b2dfdb;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+}
+
+label {
+  font-weight: 600;
+  color: #004d40;
+}
+
+input, select, textarea {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #00796b;
+  font-size: 14px;
+  width: 100%;
+  background-color: #e0f2f1;
+  box-sizing: border-box;
+}
+
+textarea { resize: vertical; }
+
+.date-time {
+  display: flex;
+  gap: 20px;
+}
+
+.date-time div { 
+  flex: 1; 
+  display: flex;
+  flex-direction: column;
+}
+
+.form-card label {
+  margin-bottom: 5px;
+}
+
+/* Submit button */
+.btn-submit {
+  background-color: #00796b;
+  color: white;
+  padding: 12px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-submit:hover {
+  background-color: #004d40;
+}
+
+/* Button right-align */
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+
+/* Table Styling */
+.visit-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 30px;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: #b2dfdb;
+  table-layout: fixed;
+}
+
+.visit-table th, .visit-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #004d40;
+  width: 12.5%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.visit-table th {
+  background-color: #00796b;
+  color: #ffffff;
+}
+
+.visit-table tbody tr:hover {
+  background-color: #80cbc4;
+  transition: 0.3s;
+}
+
+/* Status badges */
+.status-badge {
+  padding: 5px 10px;
+  border-radius: 15px;
+  color: white;
+  font-weight: bold;
+  display: inline-block;
+  font-size: 13px;
+  text-align: center;
+}
+
+.status-scheduled { background-color: #f57c00; }
+.status-completed { background-color: #2e7d32; }
+.status-cancelled { background-color: #c62828; }
+
+/* Action buttons */
+.action-btn {
+  padding: 5px 10px;
+  margin-right: 5px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 13px;
+  color: white;
+}
+
+.view-btn { background-color: #0288d1; }
+.view-btn:hover { background-color: #01579b; }
+
+.delete-btn { background-color: #d32f2f; }
+.delete-btn:hover { background-color: #9a0007; }
+
+/* Notes column ellipsis */
+.visit-table td:nth-child(7) {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+/* Responsive */
+@media (max-width: 800px) {
+  .date-time { flex-direction: column; }
+  .visit-table th, .visit-table td { font-size: 13px; }
+}
