@@ -1,13 +1,12 @@
 const express = require("express");
 const cors = require("cors");
-const { sequelize } = require("./models");
+const { sequelize, Admin } = require("./models");
 
 const app = express();
 
-// Middleware
 app.use(cors());
-app.use(express.json({ limit: "10mb" }));
-app.use(express.urlencoded({ extended: true, limit: "10mb" }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Health check
 app.get("/", (req, res) => {
@@ -25,14 +24,12 @@ app.use("/api/settings", require("./routes/settings"));
 app.use("/api/login", require("./routes/admin"));
 app.use("/api/op", require("./routes/op"));
 
-// Start server
 (async () => {
   try {
-    // ✅ Safe sync – no data loss
     await sequelize.sync({ alter: false });
     console.log("✅ DB synced safely (no alter)");
 
-    const { Admin } = require("./models");
+    // Create default admin if not exists
     const exists = await Admin.findOne({ where: { username: "admin" } });
 
     if (!exists) {
@@ -43,7 +40,7 @@ app.use("/api/op", require("./routes/op"));
       console.log("⭐ Default admin created: admin / 12345");
     }
 
-    // ✅ Use PORT from Render or fallback to 4000 locally
+    // ✅ Use Render PORT or fallback to 4000 locally
     const PORT = process.env.PORT || 4000;
 
     app.listen(PORT, "0.0.0.0", () => {
