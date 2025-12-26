@@ -1,2 +1,7 @@
-const API_BASE = "http://localhost:4000/api";
+// Change this to your Render backend URL when deploying
+const API_BASE =
+  process.env.NODE_ENV === "production"
+    ? "https://hms-backend-jfjd.onrender.com/api"
+    : "http://localhost:4000/api";
+
 export default API_BASE;
