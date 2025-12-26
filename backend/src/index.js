@@ -17,8 +17,8 @@ app.get("/", (req, res) => {
 app.use("/api/employees", require("./routes/employees"));
 app.use("/api/patients", require("./routes/patients"));
 app.use("/api/attendance", require("./routes/attendance"));
-app.use("/api/revenue", require("./routes/revenue"));       // ✅ Admin revenue
-app.use("/api/op-revenue", require("./routes/opRevenue")); // 🆕 OP revenue (NEW)
+app.use("/api/revenue", require("./routes/revenue"));       // Admin revenue
+app.use("/api/op-revenue", require("./routes/opRevenue")); // OP revenue
 app.use("/api/home-visits", require("./routes/homeVisits"));
 app.use("/api/settings", require("./routes/settings"));
 app.use("/api/login", require("./routes/admin"));
@@ -26,7 +26,7 @@ app.use("/api/op", require("./routes/op"));
 
 (async () => {
   try {
-    // ✅ SAFE SYNC — no alter, no force (NO data loss)
+    // Safe sync — no alter, no force
     await sequelize.sync({ alter: false });
     console.log("✅ DB synced safely (no alter)");
 
@@ -41,8 +41,11 @@ app.use("/api/op", require("./routes/op"));
       console.log("⭐ Default admin created: admin / 12345");
     }
 
-    app.listen(4000, () => {
-      console.log("✅ Backend running on http://localhost:4000");
+    // ✅ IMPORTANT: Use Render's PORT
+    const PORT = process.env.PORT || 4000;
+
+    app.listen(PORT, () => {
+      console.log(`✅ Backend running on port ${PORT}`);
     });
   } catch (err) {
     console.error("❌ Backend start failed:", err);
