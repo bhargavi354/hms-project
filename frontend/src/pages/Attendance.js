@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import "./Attendance.css";
+import API_BASE from "../config";
 
-const API = "http://localhost:4000/api";
 
 // HELPER
 function todayISO() {
@@ -27,7 +27,8 @@ export default function Attendance() {
 
   // LOAD EMPLOYEES
   useEffect(() => {
-    fetch(`${API}/employees`)
+  fetch(`${API_BASE}/employees`)
+
       .then((res) => res.json())
       .then((data) => setEmployees(data))
       .catch((err) => console.error("Employees Error:", err));
@@ -35,7 +36,8 @@ export default function Attendance() {
 
   // LOAD ATTENDANCE FOR DATE
   useEffect(() => {
-    fetch(`${API}/attendance/${selectedDate}`)
+  fetch(`${API_BASE}/attendance/${selectedDate}`)
+
       .then((res) => res.json())
       .then((data) => setAttendance(data))
       .catch((err) => console.error("Attendance Fetch Error:", err));
@@ -51,7 +53,8 @@ export default function Attendance() {
 
   // SAVE STATUS
   const saveStatus = (empId, status) => {
-    fetch(`${API}/attendance`, {
+  fetch(`${API_BASE}/attendance`, {
+
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
