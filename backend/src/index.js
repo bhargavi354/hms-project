@@ -4,7 +4,12 @@ const { sequelize, Admin } = require("./models");
 
 const app = express();
 
+/* =========================
+   ✅ OPEN CORS (for debugging on Render)
+========================= */
 app.use(cors());
+app.options("*", cors());
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -40,7 +45,7 @@ app.use("/api/op", require("./routes/op"));
       console.log("⭐ Default admin created: admin / 12345");
     }
 
-    // ✅ Use Render PORT or fallback to 4000 locally
+    // Render PORT or local fallback
     const PORT = process.env.PORT || 4000;
 
     app.listen(PORT, "0.0.0.0", () => {
