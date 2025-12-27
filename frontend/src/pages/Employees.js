@@ -3,6 +3,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import EmployeeCard from "../components/EmployeeCard";
 import "./Employees.css";
+import API_BASE from "../config";
 
 export default function EmployeesPage() {
   const [employees, setEmployees] = useState([]);
@@ -31,7 +32,8 @@ export default function EmployeesPage() {
   async function loadEmployees() {
     try {
       setLoading(true);
-      const res = await fetch("http://localhost:4000/api/employees");
+      const res = await fetch(`${API_BASE}/employees`);
+
       const data = await res.json();
       setEmployees(Array.isArray(data) ? data : []);
     } catch (err) {
@@ -112,7 +114,8 @@ export default function EmployeesPage() {
   async function handleRemove(id) {
     if (!window.confirm("Remove this employee?")) return;
     try {
-      await fetch(`http://localhost:4000/api/employees/${id}`, {
+      await fetch(`${API_BASE}/employees/${id}`, {
+
         method: "DELETE",
       });
       await loadEmployees();
@@ -166,13 +169,14 @@ export default function EmployeesPage() {
 
     try {
       if (editingId) {
-        await fetch(`http://localhost:4000/api/employees/${editingId}`, {
+        await fetch(`${API_BASE}/employees/${editingId}`, {
+
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
         });
       } else {
-        await fetch("http://localhost:4000/api/employees", {
+        await fetch(`${API_BASE}/employees`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
