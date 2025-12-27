@@ -12,8 +12,6 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      console.log("🔥 Using API:", API_BASE);
-
       const res = await fetch(`${API_BASE}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -27,12 +25,13 @@ export default function Login() {
         return;
       }
 
-      // ✅ login success
+      // save login flag
       localStorage.setItem("hms_logged_in", "true");
+
       navigate("/");
     } catch (error) {
+      console.error("Login error:", error);
       alert("Server error");
-      console.error(error);
     }
   };
 
@@ -47,7 +46,6 @@ export default function Login() {
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            required
           />
 
           <label>Password</label>
@@ -55,7 +53,6 @@ export default function Login() {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required
           />
 
           <button type="submit" className="login-btn">
