@@ -15,7 +15,8 @@ import {
   Legend,
 } from "recharts";
 
-const API = "http://localhost:4000/api";
+import API_BASE from "../config";
+
 
 // helpers
 function todayISO() {
@@ -62,11 +63,12 @@ export default function Dashboard() {
         setError("");
 
         const [pRes, eRes, hvRes, rRes] = await Promise.all([
-          fetch(`${API}/patients`),
-          fetch(`${API}/employees`),
-          fetch(`${API}/home-visits`),
-          fetch(`${API}/revenue`),
-        ]);
+  fetch(`${API_BASE}/patients`),
+  fetch(`${API_BASE}/employees`),
+  fetch(`${API_BASE}/home-visits`),
+  fetch(`${API_BASE}/revenue`),
+]);
+
 
         const [pData, eData, hvData, rData] = await Promise.all([
           pRes.json(),
