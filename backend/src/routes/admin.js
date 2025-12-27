@@ -5,6 +5,8 @@ const { Admin } = require("../models");
 // LOGIN API
 router.post("/", async (req, res) => {
   try {
+    console.log("🔐 Login attempt:", req.body);
+
     const { username, password } = req.body;
 
     if (!username || !password) {
@@ -12,11 +14,15 @@ router.post("/", async (req, res) => {
     }
 
     const admin = await Admin.findOne({
-      where: { username, password }
+      where: { username: username.trim() }
     });
 
     if (!admin) {
-      return res.status(401).json({ message: "Invalid credentials" });
+      return res.status(401).json({ message: "Invalid username" });
+    }
+
+    if (admin.password !== password) {
+      return res.status(401).json({ message: "Invalid password" });
     }
 
     return res.json({
@@ -24,12 +30,15 @@ router.post("/", async (req, res) => {
       message: "Login successful",
       admin: {
         id: admin.id,
-        username: admin.username
-      }
+        username: admin.username,
+      },
     });
   } catch (err) {
     console.error("❌ Admin login error:", err);
-    return res.status(500).json({ message: "Server error" });
+    return res.status(500).json({
+      message: "Server error",
+      error: err.message,
+    });
   }
 });
 
