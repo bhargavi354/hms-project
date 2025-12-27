@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import API_BASE from "../config";
 import "./Login.css";
 
 export default function Login() {
@@ -11,20 +12,23 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://localhost:4000/api/login", {
+      console.log("🔥 Using API:", API_BASE);
+
+      const res = await fetch(`${API_BASE}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
       });
 
+      const data = await res.json();
+
       if (!res.ok) {
-        alert("Invalid admin credentials");
+        alert(data.message || "Invalid admin credentials");
         return;
       }
 
-      // ✅ FIXED LINE
+      // ✅ login success
       localStorage.setItem("hms_logged_in", "true");
-
       navigate("/");
     } catch (error) {
       alert("Server error");
@@ -43,6 +47,7 @@ export default function Login() {
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+            required
           />
 
           <label>Password</label>
@@ -50,6 +55,7 @@ export default function Login() {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            required
           />
 
           <button type="submit" className="login-btn">
