@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./HomeVisits.css";
+import API_BASE from "../config";
+
 
 export default function HomeVisits() {
   const [showSection, setShowSection] = useState(false);
@@ -21,7 +23,8 @@ export default function HomeVisits() {
   useEffect(() => {
     async function loadPatients() {
       try {
-        const res = await fetch("http://localhost:4000/api/patients");
+        const res = await fetch(`${API_BASE}/patients`);
+
         const data = await res.json();
         setPatientsList(data);
       } catch (error) {
@@ -35,7 +38,8 @@ export default function HomeVisits() {
   useEffect(() => {
     async function loadStaff() {
       try {
-        const res = await fetch("http://localhost:4000/api/employees");
+        const res = await fetch(`${API_BASE}/employees`);
+
         const data = await res.json();
         setStaffList(data);
       } catch (error) {
@@ -48,7 +52,8 @@ export default function HomeVisits() {
   // ⭐ LOAD VISITS
   async function loadVisits() {
     try {
-      const res = await fetch("http://localhost:4000/api/home-visits");
+    const res = await fetch(`${API_BASE}/home-visits`);
+
       const data = await res.json();
       setVisits(data);
     } catch (error) {
@@ -66,7 +71,8 @@ export default function HomeVisits() {
 
     const data = { patient, staff, visitType, date, time, notes, status };
 
-    await fetch("http://localhost:4000/api/home-visits", {
+    await fetch(`${API_BASE}/home-visits`, {
+
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
@@ -85,7 +91,8 @@ export default function HomeVisits() {
 
   // ⭐ DELETE
   async function handleDelete(id) {
-    await fetch(`http://localhost:4000/api/home-visits/${id}`, {
+    await fetch(`${API_BASE}/home-visits/${id}`, {
+
       method: "DELETE",
     });
     loadVisits();
