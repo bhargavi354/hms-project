@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useMemo } from "react";
 import "./Patients.css";
+import API_BASE from "../config";
+
 
 export default function Patients() {
-  const API = "http://localhost:4000/api/patients";
 
   const [patients, setPatients] = useState([]);
   const [search, setSearch] = useState("");
@@ -22,11 +23,12 @@ export default function Patients() {
 
   // Load patients from backend
   useEffect(() => {
-    fetch(API)
-      .then((res) => res.json())
-      .then((data) => setPatients(data))
-      .catch((err) => console.error("Error:", err));
-  }, []);
+  fetch(`${API_BASE}/patients`)
+    .then((res) => res.json())
+    .then((data) => setPatients(data))
+    .catch((err) => console.error("Error:", err));
+}, []);
+
 
   // FILTERING
   const filteredPatients = useMemo(() => {
@@ -76,7 +78,8 @@ export default function Patients() {
     }
 
     if (editId) {
-      fetch(`${API}/${editId}`, {
+      fetch(`${API_BASE}/patients/${editId}`, {
+
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
@@ -88,7 +91,7 @@ export default function Patients() {
         );
       });
     } else {
-      fetch(API, {
+      fetch(`${API_BASE}/patients`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
@@ -106,7 +109,7 @@ export default function Patients() {
   const deletePatient = (id) => {
     if (!window.confirm("Delete this patient?")) return;
 
-    fetch(`${API}/${id}`, { method: "DELETE" }).then(() => {
+    fetch(`${API_BASE}/patients/${id}`, { method: "DELETE" }).then(() => {
       setPatients((prev) => prev.filter((p) => p.id !== id));
     });
   };
