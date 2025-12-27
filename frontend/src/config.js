@@ -1,2 +1,5 @@
-const API_BASE = "https://hms-backend-jfjd.onrender.com/api";
+// frontend/src/config.js
+const API_BASE =
+  import.meta.env.VITE_API_BASE || "http://localhost:4000/api";
+
 export default API_BASE;
