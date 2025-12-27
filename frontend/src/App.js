@@ -15,9 +15,8 @@ import Settings from "./pages/Settings";
 import OpLogin from "./op/OpLogin";
 import OpBooking from "./op/OpBooking";
 import OpDashboard from "./op/OpDashboard";
-import Reports from "./op/Reports";   // 🆕 ADDED
+import Reports from "./op/Reports";
 
-// OP BILLING
 import NewInvoice from "./pages/NewInvoice";
 import ViewInvoice from "./pages/ViewInvoice";
 
@@ -43,8 +42,6 @@ function App() {
       <Route path="/op-login" element={<OpLogin />} />
 
       {/* ================= OP STAFF ================= */}
-
-      {/* redirect /op -> /op-dashboard */}
       <Route path="/op" element={<Navigate to="/op-dashboard" replace />} />
 
       <Route
@@ -65,7 +62,6 @@ function App() {
         }
       />
 
-      {/* 🆕 REPORTS ROUTE ADDED */}
       <Route
         path="/reports"
         element={
@@ -110,6 +106,9 @@ function App() {
         <Route path="home-visits" element={<HomeVisits />} />
         <Route path="settings" element={<Settings />} />
       </Route>
+
+      {/* ✅ FALLBACK: anything else -> login */}
+      <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>
   );
 }
