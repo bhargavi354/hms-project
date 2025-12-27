@@ -5,11 +5,9 @@ const { sequelize, Admin } = require("./models");
 const app = express();
 
 /* =========================
-   ✅ OPEN CORS (for debugging on Render)
+   ✅ OPEN CORS (Render + local)
 ========================= */
 app.use(cors());
-app.options("*", cors());
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -29,12 +27,15 @@ app.use("/api/settings", require("./routes/settings"));
 app.use("/api/login", require("./routes/admin"));
 app.use("/api/op", require("./routes/op"));
 
+/* =========================
+   🚀 Start server + seed admin
+========================= */
 (async () => {
   try {
     await sequelize.sync({ alter: false });
-    console.log("✅ DB synced safely (no alter)");
+    console.log("✅ DB synced");
 
-    // Create default admin if not exists
+    // 🔐 Ensure default admin exists
     const exists = await Admin.findOne({ where: { username: "admin" } });
 
     if (!exists) {
@@ -43,9 +44,10 @@ app.use("/api/op", require("./routes/op"));
         password: "12345",
       });
       console.log("⭐ Default admin created: admin / 12345");
+    } else {
+      console.log("✅ Admin already exists");
     }
 
-    // Render PORT or local fallback
     const PORT = process.env.PORT || 4000;
 
     app.listen(PORT, "0.0.0.0", () => {
