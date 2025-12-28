@@ -107,7 +107,7 @@ function App() {
         <Route path="settings" element={<Settings />} />
       </Route>
 
-      {/* ✅ FALLBACK: anything else -> login */}
+      {/* ================= FALLBACK ================= */}
       <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>
   );
