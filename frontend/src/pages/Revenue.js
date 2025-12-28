@@ -1,6 +1,7 @@
 /* eslint-disable */
 import React, { useEffect, useMemo, useState, useRef } from "react";
 import "./Revenue.css";
+import API_BASE from "../config";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import {
@@ -13,7 +14,6 @@ import {
   CartesianGrid,
 } from "recharts";
 
-const API = "http://localhost:4000/api";
 
 function todayISO() {
   return new Date().toISOString().slice(0, 10);
@@ -55,7 +55,8 @@ export default function Revenue() {
   const invoiceRef = useRef();
 
   const loadInvoices = () => {
-    fetch(`${API}/revenue`)
+    fetch(`${API_BASE}/revenue`)
+
       .then((r) => r.json())
       .then((data) => setInvoices(Array.isArray(data) ? data : data.rows || []))
       .catch(() => setInvoices([]));
@@ -170,7 +171,7 @@ export default function Revenue() {
       status: "pending",
     };
 
-    fetch(`${API}/revenue`, {
+    fetch(`${API_BASE}/revenue`)
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
@@ -186,7 +187,8 @@ export default function Revenue() {
     const newStatus =
       (inv.status || "pending") === "paid" ? "pending" : "paid";
 
-    fetch(`${API}/revenue/${inv.id}`, {
+    fetch(`${API_BASE}/revenue/${inv.id}`, {
+
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status: newStatus }),
@@ -197,7 +199,7 @@ export default function Revenue() {
 
   function deleteInvoice(id) {
     if (!window.confirm("Delete invoice?")) return;
-    fetch(`${API}/revenue/${id}`, { method: "DELETE" })
+    fetch(`${API_BASE}/revenue/${id}`, { method: "DELETE" })
       .then(() => loadInvoices())
       .catch(console.error);
   }
