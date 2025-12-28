@@ -566,7 +566,11 @@ export default function Settings() {
   };
 
   return (
-    <div className="settings-page">
+    <div
+  className="settings-page"
+  style={{ background: "#ffedd5", minHeight: "100vh" }}
+>
+  <h1 style={{ color: "red" }}>Settings Page Loaded</h1>
       <div className="settings-card">
         {/* LEFT MENU */}
         <div className="settings-sidebar">
