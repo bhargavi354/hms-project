@@ -67,9 +67,9 @@ function Layout() {
       </div>
 
       {/* Content */}
-      <div style={{ flex: 1, padding: "20px" }}>
-        <Outlet />
-      </div>
+<div style={{ flex: 1, padding: "20px", overflowY: "auto", height: "100vh" }}>
+  <Outlet />
+</div>
     </div>
   );
 }

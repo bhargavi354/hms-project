@@ -2,8 +2,8 @@
 
 .settings-page {
   padding: 32px 40px;
-  min-height: calc(100vh - 64px);
-  background: transparent;
+  min-height: 100vh;     /* full height */
+  background: #e9fbff;  /* visible background */
 }
 
 .settings-card {
@@ -298,4 +298,7 @@
   .settings-tab {
     white-space: nowrap;
   }
+}
+.settings-card {
+  min-height: 500px;
 }
