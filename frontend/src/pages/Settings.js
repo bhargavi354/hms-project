@@ -12,6 +12,7 @@ const SECTIONS = [
 ];
 
 export default function Settings() {
+    console.log("✅ Settings component mounted");
   console.log("Settings rendered");
   const [activeSection, setActiveSection] = useState("Profile Settings");
 
