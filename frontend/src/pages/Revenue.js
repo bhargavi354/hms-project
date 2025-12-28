@@ -56,7 +56,6 @@ export default function Revenue() {
 
   const loadInvoices = () => {
     fetch(`${API_BASE}/revenue`)
-
       .then((r) => r.json())
       .then((data) => setInvoices(Array.isArray(data) ? data : data.rows || []))
       .catch(() => setInvoices([]));
@@ -171,7 +170,7 @@ export default function Revenue() {
       status: "pending",
     };
 
-    fetch(`${API_BASE}/revenue`)
+    fetch(`${API_BASE}/revenue`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
@@ -188,7 +187,6 @@ export default function Revenue() {
       (inv.status || "pending") === "paid" ? "pending" : "paid";
 
     fetch(`${API_BASE}/revenue/${inv.id}`, {
-
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status: newStatus }),
