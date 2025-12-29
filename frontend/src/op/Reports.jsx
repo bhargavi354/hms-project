@@ -1,24 +1,45 @@
 import React, { useState } from "react";
 import "./Reports.css";
+import API_BASE from "../config";
 
 export default function Reports() {
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
 
-  // Dummy values for now – later API nunchi fetch chestam
-  const opSummary = {
-    total: 13,
-    pending: 2,
-    completed: 11,
-  };
+  const [opSummary, setOpSummary] = useState({
+    total: 0,
+    pending: 0,
+    completed: 0,
+  });
 
-  const revenueSummary = {
-    total: 5250,
-  };
+  const [revenueSummary, setRevenueSummary] = useState({
+    total: 0,
+  });
 
-  const handleGenerate = () => {
-    alert(`Generate report from ${fromDate} to ${toDate}`);
-    // Later: API call here
+  const handleGenerate = async () => {
+    if (!fromDate || !toDate) {
+      alert("Please select both dates");
+      return;
+    }
+
+    try {
+      // 🔹 Fetch OP summary
+      const opRes = await fetch(
+        `${API_BASE}/op/summary?from=${fromDate}&to=${toDate}`
+      );
+      const opData = await opRes.json();
+      setOpSummary(opData);
+
+      // 🔹 Fetch revenue summary
+      const revRes = await fetch(
+        `${API_BASE}/revenue/summary?from=${fromDate}&to=${toDate}`
+      );
+      const revData = await revRes.json();
+      setRevenueSummary(revData);
+    } catch (err) {
+      console.error("Failed to load report", err);
+      alert("Failed to fetch report data");
+    }
   };
 
   return (
@@ -46,9 +67,15 @@ export default function Reports() {
         {/* OP Summary */}
         <div className="report-card">
           <h3>OP Summary</h3>
-          <div className="card-item">Total OPs: <b>{opSummary.total}</b></div>
-          <div className="card-item">Pending: <b>{opSummary.pending}</b></div>
-          <div className="card-item">Completed: <b>{opSummary.completed}</b></div>
+          <div className="card-item">
+            Total OPs: <b>{opSummary.total}</b>
+          </div>
+          <div className="card-item">
+            Pending: <b>{opSummary.pending}</b>
+          </div>
+          <div className="card-item">
+            Completed: <b>{opSummary.completed}</b>
+          </div>
         </div>
 
         {/* Revenue Summary */}
