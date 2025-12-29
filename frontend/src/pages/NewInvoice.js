@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import "./Revenue.css";
+import API_BASE from "../config";
 
 export default function NewInvoice() {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ export default function NewInvoice() {
   useEffect(() => {
     if (!opId) return;
 
-    fetch(`http://localhost:4000/api/op/${opId}`)
+    fetch(`${API_BASE}/op/${opId}`)
       .then((res) => res.json())
       .then((data) => {
         if (!data || !data.token) {
@@ -72,7 +73,7 @@ export default function NewInvoice() {
     try {
       setLoading(true);
 
-      const res = await fetch("http://localhost:4000/api/op-revenue", {
+      const res = await fetch(`${API_BASE}/op-revenue`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
