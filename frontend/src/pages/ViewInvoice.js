@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
+import API_BASE from "../config";
 
 export default function ViewInvoice() {
   const [searchParams] = useSearchParams();
@@ -19,7 +20,7 @@ export default function ViewInvoice() {
       return;
     }
 
-    fetch(`http://localhost:4000/api/revenue/by-op/${opId}`)
+    fetch(`${API_BASE}/revenue/by-op/${opId}`)
       .then(async (res) => {
         const data = await res.json();
         if (!res.ok) throw new Error(data.message || "Failed to load invoice");
@@ -45,7 +46,7 @@ export default function ViewInvoice() {
     try {
       setRefunding(true);
       const res = await fetch(
-        `http://localhost:4000/api/revenue/refund/${opId}`,
+        `${API_BASE}/revenue/refund/${opId}`,
         { method: "PUT" }
       );
       const data = await res.json();
