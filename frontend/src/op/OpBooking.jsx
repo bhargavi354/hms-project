@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./OpBooking.css";
+import API_BASE from "../config";
 
 export default function OpBooking() {
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ export default function OpBooking() {
   }, []);
 
   const fetchOps = async () => {
-    let url = "http://localhost:4000/api/op";
+    let url = `${API_BASE}/op`;
     const params = [];
 
     if (search) params.push(`search=${search}`);
@@ -41,12 +42,10 @@ export default function OpBooking() {
     setOps(data);
   };
 
-  // ✅ FIXED: Fetch OP revenue stats (not admin)
+  // ✅ OP revenue stats
   const fetchRevenue = async () => {
     try {
-      const res = await fetch(
-        "http://localhost:4000/api/op-revenue/stats"
-      );
+      const res = await fetch(`${API_BASE}/op-revenue/stats`);
       const data = await res.json();
       setRevenue(data.totalRevenue || 0);
       setTodayRevenue(data.todayRevenue || 0);
@@ -78,7 +77,7 @@ export default function OpBooking() {
       return;
     }
 
-    await fetch("http://localhost:4000/api/op", {
+    await fetch(`${API_BASE}/op`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form),
@@ -100,7 +99,7 @@ export default function OpBooking() {
   };
 
   const markCompleted = async (id) => {
-    await fetch(`http://localhost:4000/api/op/${id}/complete`, {
+    await fetch(`${API_BASE}/op/${id}/complete`, {
       method: "PUT",
     });
     fetchOps();
