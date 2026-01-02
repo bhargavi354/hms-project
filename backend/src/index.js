@@ -4,14 +4,10 @@ const { sequelize, Admin } = require("./models");
 
 const app = express();
 
-/* =========================
-   ✅ OPEN CORS (Render + local)
-========================= */
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Health check
 app.get("/", (req, res) => {
   res.send("HMS Backend Running ✅");
 });
@@ -27,32 +23,30 @@ app.use("/api/settings", require("./routes/settings"));
 app.use("/api/login", require("./routes/admin"));
 app.use("/api/op", require("./routes/op"));
 
-/* =========================
-   🚀 Start server + seed admin
-========================= */
 (async () => {
   try {
-    await sequelize.sync({ alter: false });
+    await sequelize.sync();
     console.log("✅ DB synced");
 
-    // 🔐 Ensure default admin exists
-    const exists = await Admin.findOne({ where: { username: "admin" } });
+    const ADMIN_USER = process.env.ADMIN_USER || "admin";
+    const ADMIN_PASS = process.env.ADMIN_PASS || "12345";
+
+    const exists = await Admin.findOne({ where: { username: ADMIN_USER } });
 
     if (!exists) {
       await Admin.create({
-        username: "admin",
-        password: "12345",
+        username: ADMIN_USER,
+        password: ADMIN_PASS,
       });
-      console.log("⭐ Default admin created: admin / 12345");
+      console.log("⭐ Default admin created");
     } else {
       console.log("✅ Admin already exists");
     }
 
     const PORT = process.env.PORT || 4000;
-
-    app.listen(PORT, "0.0.0.0", () => {
-      console.log(`✅ Backend running on port ${PORT}`);
-    });
+    app.listen(PORT, "0.0.0.0", () =>
+      console.log(`✅ Backend running on port ${PORT}`)
+    );
   } catch (err) {
     console.error("❌ Backend start failed:", err);
   }
