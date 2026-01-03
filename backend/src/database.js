@@ -1,32 +1,23 @@
-import sqlite3 from "sqlite3";
-import path from "path";
-import { fileURLToPath } from "url";
+import { Sequelize } from "sequelize";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const isProduction = process.env.NODE_ENV === "production";
 
-// SQLite database file
-const dbPath = path.join(__dirname, "hms.db");
+const sequelize = isProduction
+  ? new Sequelize(process.env.DATABASE_URL, {
+      dialect: "postgres",
+      protocol: "postgres",
+      logging: false,
+      dialectOptions: {
+        ssl: {
+          require: true,
+          rejectUnauthorized: false,
+        },
+      },
+    })
+  : new Sequelize({
+      dialect: "sqlite",
+      storage: "./hms.sqlite",
+      logging: false,
+    });
 
-const db = new sqlite3.Database(dbPath, (err) => {
-    if (err) console.log("DB Error:", err);
-    else console.log("SQLite DB Connected");
-});
-
-// Create tables
-db.serialize(() => {
-    db.run(`
-        CREATE TABLE IF NOT EXISTS homeVisits (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            patient TEXT,
-            staff TEXT,
-            visitType TEXT,
-            date TEXT,
-            time TEXT,
-            notes TEXT,
-            status TEXT
-        )
-    `);
-});
-
-export default db;
+export default sequelize;

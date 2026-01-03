@@ -25,11 +25,9 @@ app.use("/api/op", require("./routes/op"));
 
 (async () => {
   try {
-    // ❗ DO NOT sync in production
-    if (process.env.NODE_ENV !== "production") {
-      await sequelize.sync();
-      console.log("✅ DB synced (local)");
-    }
+    // ✅ ONE TIME: create tables in Neon
+    await sequelize.sync({ alter: true });
+    console.log("✅ DB synced (ONE TIME)");
 
     const ADMIN_USER = process.env.ADMIN_USER || "admin";
     const ADMIN_PASS = process.env.ADMIN_PASS || "12345";
