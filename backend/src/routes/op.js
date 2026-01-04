@@ -37,7 +37,7 @@ router.get("/", async (req, res) => {
 });
 
 /* ======================
-   GET SINGLE OP (FOR BILLING)
+   GET SINGLE OP
 ====================== */
 router.get("/:id", async (req, res) => {
   try {
@@ -48,9 +48,7 @@ router.get("/:id", async (req, res) => {
     if (!op) {
       op = await OpBooking.findOne({
         where: {
-          token: {
-            [Op.like]: `%${id}`,
-          },
+          token: { [Op.like]: `%${id}` },
         },
       });
     }
@@ -66,7 +64,7 @@ router.get("/:id", async (req, res) => {
 });
 
 /* ======================
-   ADD OP (SEQUENTIAL TOKEN)
+   ADD OP (✅ FIXED)
 ====================== */
 router.post("/", async (req, res) => {
   try {
@@ -80,8 +78,17 @@ router.post("/", async (req, res) => {
       visitTime,
     } = req.body;
 
-    if (!patientName || !doctor || !visitTime) {
-      return res.status(400).json({ message: "Missing fields" });
+    // ✅ STRICT VALIDATION (matches DB)
+    if (
+      !patientName ||
+      !age ||
+      !gender ||
+      !phone ||
+      !problem ||
+      !doctor ||
+      !visitTime
+    ) {
+      return res.status(400).json({ message: "All fields are required" });
     }
 
     const lastOp = await OpBooking.findOne({
@@ -93,9 +100,7 @@ router.post("/", async (req, res) => {
     if (lastOp && lastOp.token) {
       const parts = lastOp.token.split("-");
       const lastNum = parseInt(parts[1], 10);
-      if (!isNaN(lastNum)) {
-        nextNumber = lastNum + 1;
-      }
+      if (!isNaN(lastNum)) nextNumber = lastNum + 1;
     }
 
     const token = "OP-" + String(nextNumber).padStart(4, "0");
@@ -103,7 +108,7 @@ router.post("/", async (req, res) => {
     const op = await OpBooking.create({
       token,
       patientName,
-      age,
+      age: Number(age),        // ✅ IMPORTANT FIX
       gender,
       phone,
       problem,
@@ -112,7 +117,7 @@ router.post("/", async (req, res) => {
       status: "Pending",
     });
 
-    res.json(op);
+    res.status(201).json(op);
   } catch (err) {
     console.error("Add OP error:", err);
     res.status(500).json({ error: err.message });
@@ -136,80 +141,6 @@ router.put("/:id/complete", async (req, res) => {
     res.json(op);
   } catch (err) {
     res.status(500).json({ error: err.message });
-  }
-});
-
-/* ======================
-   OP DASHBOARD STATS (TODAY)
-====================== */
-router.get("/stats/summary", async (req, res) => {
-  try {
-    const today = new Date().toISOString().slice(0, 10);
-
-    const totalToday = await OpBooking.count({
-      where: {
-        createdAt: {
-          [Op.between]: [`${today} 00:00:00`, `${today} 23:59:59`],
-        },
-      },
-    });
-
-    const pending = await OpBooking.count({
-      where: { status: "Pending" },
-    });
-
-    const completed = await OpBooking.count({
-      where: { status: "Completed" },
-    });
-
-    res.json({
-      today: totalToday,
-      pending,
-      completed,
-    });
-  } catch (err) {
-    console.error("OP stats error:", err);
-    res.status(500).json({ message: "Failed to load OP stats" });
-  }
-});
-
-/* ======================
-   🆕 OP STATS BY DATE RANGE (FOR REPORTS)
-====================== */
-router.get("/stats/range", async (req, res) => {
-  try {
-    const { from, to } = req.query;
-
-    if (!from || !to) {
-      return res.status(400).json({ message: "From and To dates required" });
-    }
-
-    const start = `${from} 00:00:00`;
-    const end = `${to} 23:59:59`;
-
-    const total = await OpBooking.count({
-      where: {
-        createdAt: { [Op.between]: [start, end] },
-      },
-    });
-
-    const pending = await OpBooking.count({
-      where: {
-        status: "Pending",
-        createdAt: { [Op.between]: [start, end] },
-      },
-    });
-
-    const completed = await OpBooking.count({
-      where: {
-        status: "Completed",
-        createdAt: { [Op.between]: [start, end] },
-      },
-    });
-
-    res.json({ total, pending, completed });
-  } catch (err) {
-    res.status(500).json({ message: "Failed to load OP range stats" });
   }
 });
 
