@@ -1,6 +1,6 @@
-// frontend/src/config.js
+// frontend/src/config.js (VITE CORRECT VERSION)
 
 const API_BASE =
-  process.env.REACT_APP_API_BASE || "http://localhost:4000/api";
+  import.meta.env.VITE_API_BASE || "http://localhost:4000/api";
 
 export default API_BASE;
