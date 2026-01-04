@@ -30,6 +30,38 @@ const HomeVisit  = require("./homeVisit")(sequelize, DataTypes);
 const Admin      = require("./admin")(sequelize, DataTypes);
 const OpBooking  = require("./OpBooking")(sequelize, DataTypes);
 
+/* ===== AUTO CREATE ADMIN (PRODUCTION SAFE) ===== */
+const ensureAdmin = async () => {
+  try {
+    const admin = await Admin.findOne({
+      where: { username: "admin" },
+    });
+
+    if (!admin) {
+      await Admin.create({
+        username: "admin",
+        password: "12345",
+      });
+      console.log("✅ Default admin created (admin / 12345)");
+    } else {
+      console.log("✅ Admin already exists");
+    }
+  } catch (err) {
+    console.error("❌ Error ensuring admin:", err.message);
+  }
+};
+
+/* ===== SYNC & INIT ===== */
+sequelize
+  .sync()
+  .then(() => {
+    console.log("✅ DB synced");
+    ensureAdmin(); // 🔥 THIS FIXES YOUR RENDER LOGIN ISSUE
+  })
+  .catch((err) => {
+    console.error("❌ DB sync failed:", err);
+  });
+
 module.exports = {
   sequelize,
   Employee,
