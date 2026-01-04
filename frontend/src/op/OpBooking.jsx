@@ -42,7 +42,6 @@ export default function OpBooking() {
     setOps(data);
   };
 
-  // ✅ OP revenue stats
   const fetchRevenue = async () => {
     try {
       const res = await fetch(`${API_BASE}/op-revenue/stats`);
@@ -71,31 +70,50 @@ export default function OpBooking() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  // ✅ FIXED: Proper validation + error handling added
   const handleSave = async () => {
-    if (!form.patientName || !form.visitTime) {
-      alert("Patient name & time required");
+    if (
+      !form.patientName ||
+      !form.age ||
+      !form.gender ||
+      !form.phone ||
+      !form.problem ||
+      !form.doctor ||
+      !form.visitTime
+    ) {
+      alert("All fields are required");
       return;
     }
 
-    await fetch(`${API_BASE}/op`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
-    });
+    try {
+      const res = await fetch(`${API_BASE}/op`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
 
-    setForm({
-      patientName: "",
-      age: "",
-      gender: "",
-      phone: "",
-      problem: "",
-      doctor: "",
-      visitTime: "",
-    });
+      if (!res.ok) {
+        const err = await res.text();
+        throw new Error(err);
+      }
 
-    setShowForm(false);
-    fetchOps();
-    fetchRevenue();
+      setForm({
+        patientName: "",
+        age: "",
+        gender: "",
+        phone: "",
+        problem: "",
+        doctor: "",
+        visitTime: "",
+      });
+
+      setShowForm(false);
+      fetchOps();
+      fetchRevenue();
+    } catch (err) {
+      console.error("OP save failed:", err);
+      alert("Failed to save OP. Check console.");
+    }
   };
 
   const markCompleted = async (id) => {
@@ -161,18 +179,8 @@ export default function OpBooking() {
 
       {showForm && (
         <div className="op-form">
-          <input
-            name="patientName"
-            placeholder="Patient Name"
-            value={form.patientName}
-            onChange={handleChange}
-          />
-          <input
-            name="age"
-            placeholder="Age"
-            value={form.age}
-            onChange={handleChange}
-          />
+          <input name="patientName" placeholder="Patient Name" value={form.patientName} onChange={handleChange} />
+          <input name="age" placeholder="Age" value={form.age} onChange={handleChange} />
 
           <select name="gender" value={form.gender} onChange={handleChange}>
             <option value="">Select Gender</option>
@@ -181,38 +189,14 @@ export default function OpBooking() {
             <option>Other</option>
           </select>
 
-          <input
-            name="phone"
-            placeholder="Phone"
-            value={form.phone}
-            onChange={handleChange}
-          />
-          <input
-            name="problem"
-            placeholder="Problem"
-            value={form.problem}
-            onChange={handleChange}
-          />
-          <input
-            name="doctor"
-            placeholder="Doctor"
-            value={form.doctor}
-            onChange={handleChange}
-          />
+          <input name="phone" placeholder="Phone" value={form.phone} onChange={handleChange} />
+          <input name="problem" placeholder="Problem" value={form.problem} onChange={handleChange} />
+          <input name="doctor" placeholder="Doctor" value={form.doctor} onChange={handleChange} />
 
-          <input
-            type="time"
-            name="visitTime"
-            value={form.visitTime}
-            onChange={handleChange}
-          />
+          <input type="time" name="visitTime" value={form.visitTime} onChange={handleChange} />
 
-          <button className="save-btn" onClick={handleSave}>
-            Save
-          </button>
-          <button className="cancel-btn" onClick={() => setShowForm(false)}>
-            Cancel
-          </button>
+          <button className="save-btn" onClick={handleSave}>Save</button>
+          <button className="cancel-btn" onClick={() => setShowForm(false)}>Cancel</button>
         </div>
       )}
 
@@ -240,26 +224,15 @@ export default function OpBooking() {
                 <td>{op.status}</td>
                 <td>
                   {op.status === "Pending" && (
-                    <button onClick={() => markCompleted(op.id)}>
-                      Complete
-                    </button>
+                    <button onClick={() => markCompleted(op.id)}>Complete</button>
                   )}
 
                   {op.status === "Completed" && (
                     <>
-                      <button
-                        onClick={() =>
-                          navigate(`/revenue/new?opId=${op.id}`)
-                        }
-                      >
+                      <button onClick={() => navigate(`/revenue/new?opId=${op.id}`)}>
                         Generate Bill
                       </button>
-
-                      <button
-                        onClick={() =>
-                          navigate(`/revenue/view?opId=${op.id}`)
-                        }
-                      >
+                      <button onClick={() => navigate(`/revenue/view?opId=${op.id}`)}>
                         View Bill
                       </button>
                     </>
