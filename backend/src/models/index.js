@@ -30,7 +30,7 @@ const HomeVisit  = require("./homeVisit")(sequelize, DataTypes);
 const Admin      = require("./admin")(sequelize, DataTypes);
 const OpBooking  = require("./OpBooking")(sequelize, DataTypes);
 
-/* ===== AUTO CREATE ADMIN (PRODUCTION SAFE) ===== */
+/* ===== AUTO CREATE ADMIN ===== */
 const ensureAdmin = async () => {
   try {
     const admin = await Admin.findOne({
@@ -51,12 +51,12 @@ const ensureAdmin = async () => {
   }
 };
 
-/* ===== SYNC & INIT ===== */
+/* ===== SYNC DB (IMPORTANT FIX) ===== */
 sequelize
-  .sync()
+  .sync({ alter: true })   // ✅ THIS FIXES POSTGRES TOKEN ISSUE
   .then(() => {
-    console.log("✅ DB synced");
-    ensureAdmin(); // 🔥 THIS FIXES YOUR RENDER LOGIN ISSUE
+    console.log("✅ DB synced (alter)");
+    ensureAdmin();
   })
   .catch((err) => {
     console.error("❌ DB sync failed:", err);
